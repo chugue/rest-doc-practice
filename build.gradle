@@ -59,13 +59,18 @@ ext {
 tasks.named('asciidoctor') {
 	inputs.dir snippetsDir
 	dependsOn test
+	doFirst {
+		delete file("src/main/resources/static/docs")
+	}
+	doLast {
+		copy {
+			from "${asciidoctor.outputDir}"
+			into 'src/main/resources/static/docs'
+		}
+	}
 }
-
 bootJar {
 	dependsOn asciidoctor
-	copy {
-		// src/docs/asciidoc == from 경로
-		from "${asciidoctor.outputDir}"
-		into 'src/main/resources/static/docs' // /static/docs로 복사!
-	}
+
+
 }
